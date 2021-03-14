@@ -15,7 +15,7 @@ val gitDescribe: String
     }.toString().trim().replace(Regex("-g([a-z0-9]+)$"), "-$1")
 
 tasks {
-    register("commit&push") {
+    register("1commit&push") {
         group = "kx"
         doLast {
             rootProject.exec { commandLine("git", "add", ".") }
@@ -26,14 +26,12 @@ tasks {
             rootProject.exec { commandLine("git", "push") }
         }
     }
-    register("publishSnapshot") {
+    register("2publishSnapshot") {
         group = "kx"
-//        dependsOn("commit&push")
-        finalizedBy(
-            subprojects.map { it.tasks.matching { task -> task.name == "publish" } },
-            "_commit&pushMary") // dependencies
+//        dependsOn("commit&push") not reliable
+        finalizedBy(subprojects.map { it.tasks.matching { task -> task.name == "publish" } })
     }
-    register("_commit&pushMary") {
+    register("3commit&pushMary") {
         group = "kx"
         doLast {
             val maryDir = file("$rootDir/../mary")
@@ -54,6 +52,6 @@ tasks {
                 commandLine("git", "push")
             }
         }
-        mustRunAfter("publishSnapshot") // order
+//        mustRunAfter("publishSnapshot") // order
     }
 }
