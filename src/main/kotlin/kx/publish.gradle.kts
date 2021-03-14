@@ -28,12 +28,12 @@ tasks {
     }
     register("publishSnapshot") {
         group = "kx"
-        dependsOn("commit&push")
+//        dependsOn("commit&push")
         finalizedBy(
             subprojects.map { it.tasks.matching { task -> task.name == "publish" } },
-            "commit&pushMary") // dependencies
+            "_commit&pushMary") // dependencies
     }
-    register("commit&pushMary") {
+    register("_commit&pushMary") {
         group = "kx"
         doLast {
             val maryDir = file("$rootDir/../mary")
