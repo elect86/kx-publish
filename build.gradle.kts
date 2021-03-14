@@ -10,7 +10,7 @@ repositories {
 }
 
 group = "kotlin.graphics.build-logic"
-version = "0.0.7"
+version = "0.0.8"
 
 publishing {
     //    publications.create<MavenPublication>("maven") {

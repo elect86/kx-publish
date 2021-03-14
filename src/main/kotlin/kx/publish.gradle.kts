@@ -29,7 +29,9 @@ tasks {
     register("publishSnapshot") {
         group = "kx"
         dependsOn("commit&push")
-        finalizedBy(subprojects.map { it.tasks.matching { task -> task.name == "publish" } })
+        finalizedBy(
+            subprojects.map { it.tasks.matching { task -> task.name == "publish" } },
+            "commit&pushMary") // dependencies
     }
     register("commit&pushMary") {
         group = "kx"
@@ -52,6 +54,6 @@ tasks {
                 commandLine("git", "push")
             }
         }
-        mustRunAfter("publishSnapshot")
+        mustRunAfter("publishSnapshot") // order
     }
 }
