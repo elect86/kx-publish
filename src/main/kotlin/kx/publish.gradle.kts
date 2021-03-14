@@ -1,19 +1,18 @@
-
 package kx
+
+import java.io.ByteArrayOutputStream
 
 plugins {
     java
 }
 
 val gitDescribe: String
-    get() {
-        val stdout = java.io.ByteArrayOutputStream()
+    get() = ByteArrayOutputStream().also {
         rootProject.exec {
             commandLine("git", "describe", "--tags")
-            standardOutput = stdout
+            standardOutput = it
         }
-        return stdout.toString().trim().replace(Regex("-g([a-z0-9]+)$"), "-$1")
-    }
+    }.toString().trim().replace(Regex("-g([a-z0-9]+)$"), "-$1")
 
 tasks {
     register("commit&push") {
@@ -29,14 +28,8 @@ tasks {
     }
     register("publishSnapshot") {
         group = "kx"
-        doLast {
-            subprojects { version = gitDescribe }
-            println("publish")
-        }
         dependsOn("commit&push")
-        finalizedBy(
-            getTasksByName("publish", true),
-            "commit&pushMary")
+        finalizedBy(subprojects.map { it.tasks.matching { task -> task.name == "publish" } })
     }
     register("commit&pushMary") {
         group = "kx"
@@ -59,5 +52,6 @@ tasks {
                 commandLine("git", "push")
             }
         }
+        mustRunAfter("publishSnapshot")
     }
 }
