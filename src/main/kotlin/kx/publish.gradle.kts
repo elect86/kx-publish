@@ -2,9 +2,20 @@ package kx
 
 import java.io.ByteArrayOutputStream
 
-//plugins {
-//    `maven-publish`
-//}
+plugins {
+    `maven-publish`
+}
+
+publishing {
+    publications.create<MavenPublication>("maven") {
+        from(components["java"])
+    }
+    repositories {
+        maven {
+            url = uri("$rootDir/../mary")
+        }
+    }
+}
 
 val gitDescribe: String
     get() = ByteArrayOutputStream().also {
