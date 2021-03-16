@@ -8,9 +8,9 @@ plugins {
 }
 
 publishing {
-    publications.create<MavenPublication>("maven") {
-        from(components["java"])
-    }
+//    publications.create<MavenPublication>("maven") {
+//        from(components["java"])
+//    }
     repositories {
         maven {
             url = uri("$rootDir/../mary")
