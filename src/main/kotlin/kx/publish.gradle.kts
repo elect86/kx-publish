@@ -2,9 +2,9 @@ package kx
 
 import java.io.ByteArrayOutputStream
 
-plugins {
-    java
-}
+//plugins {
+//    `maven-publish`
+//}
 
 val gitDescribe: String
     get() = ByteArrayOutputStream().also {
@@ -21,15 +21,15 @@ tasks {
             rootProject.exec { commandLine("git", "add", ".") }
             var message = gitDescribe.substringBeforeLast('-')
             val commits = message.substringAfterLast('-').toInt() + 1
-            message = message.substringBeforeLast('-') + "-$commits"
+            message = message.substringBeforeLast('-') + "+$commits"
             rootProject.exec { commandLine("git", "commit", "-m", message) }
             rootProject.exec { commandLine("git", "push") }
         }
     }
-    register("2publishSnapshot") {
+    register("2=>publish") {
         group = "kx"
 //        dependsOn("commit&push") not reliable
-        finalizedBy(subprojects.map { it.tasks.matching { task -> task.name == "publish" } })
+        finalizedBy(getTasksByName("publish", true))
     }
     register("3commit&pushMary") {
         group = "kx"
