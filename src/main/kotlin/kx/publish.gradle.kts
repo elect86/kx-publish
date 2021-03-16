@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream
 
 plugins {
     `maven-publish`
+    `java-library`
 }
 
 publishing {
